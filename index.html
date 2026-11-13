@@ -1,0 +1,1953 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Almazaya MathQuest — Mr. Taqwa's Class | Grade 7.4</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            skyquest: {
+              50: '#F0F9FF',
+              100: '#E0F2FE',
+              200: '#BAE6FD',
+              300: '#7DD3FC',
+              400: '#38BDF8',
+              500: '#0EA5E9',
+              600: '#0284C7',
+              700: '#0369A1',
+              800: '#075985',
+              900: '#0C4A6E',
+            }
+          },
+          boxShadow: {
+            'soft': '0 8px 30px -4px rgba(14, 165, 233, 0.10)',
+            'card': '0 2px 14px -2px rgba(15, 23, 42, 0.05)',
+            'pill': '0 4px 12px rgba(2, 132, 199, 0.18)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Base styling & smooth typography scaling for 16:9 Projector Focus Mode */
+    :root {
+      --base-scale: 100%;
+    }
+
+    html {
+      font-size: var(--base-scale);
+    }
+
+    html.projector-mode {
+      --base-scale: 114%;
+    }
+
+    body {
+      background-color: #F3F8FC;
+      color: #1E293B;
+      overflow-x: hidden;
+    }
+
+    /* Subtle floating animation for Mr. Taqwa's Scholar Falcon/Owl Mascot */
+    @keyframes mascotFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(1.5deg); }
+    }
+    .animate-mascot {
+      animation: mascotFloat 3.6s ease-in-out infinite;
+    }
+
+    /* Smooth tab panel entrance */
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .tab-panel-active {
+      animation: tabFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Celebration pop animation */
+    @keyframes popBadge {
+      0% { transform: scale(0.92); opacity: 0; }
+      65% { transform: scale(1.03); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop {
+      animation: popBadge 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Monospace math expression styling */
+    .math-expr {
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -0.02em;
+    }
+
+    /* Notebook ruled background for Core Notes board card */
+    .notebook-surface {
+      background-image: linear-gradient(to bottom, transparent 31px, rgba(186, 230, 253, 0.32) 32px);
+      background-size: 100% 32px;
+    }
+
+    /* Custom subtle scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-skyquest-200 selection:text-skyquest-900 pb-24 lg:pb-6">
+
+  <!-- Toast Notification Container (Replaces alert() cleanly) -->
+  <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2.5 pointer-events-none max-w-xs sm:max-w-sm"></div>
+
+  <!-- =====================================================================
+       MAIN APPLICATION SHELL (16:9 3-Column Desktop + Mobile Single Column)
+       ===================================================================== -->
+  <div id="app-shell" class="max-w-[1540px] mx-auto px-3 sm:px-5 pt-3 sm:pt-5 transition-all duration-300">
+    <div id="layout-grid" class="grid grid-cols-1 lg:grid-cols-[248px_1fr_316px] gap-4 sm:gap-5 items-start">
+
+      <!-- ===================================================================
+           COLUMN 1: LEFT SIDEBAR (Desktop Navigation & Mr. Taqwa Profile)
+           =================================================================== -->
+      <aside id="left-sidebar" class="hidden lg:flex flex-col bg-white rounded-3xl p-4 shadow-card border border-slate-100 sticky top-5 min-h-[calc(100vh-2.5rem)] justify-between">
+        <div>
+          <!-- Brand Header -->
+          <div class="flex items-center gap-3 px-2 py-2 mb-5">
+            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-skyquest-500 to-blue-600 flex items-center justify-center shadow-pill shrink-0">
+              <!-- Scholar Owl/Falcon Mini SVG -->
+              <svg class="w-7 h-7" viewBox="0 0 64 64" fill="none">
+                <circle cx="32" cy="35" r="19" fill="#FFFFFF"/>
+                <path d="M16 22L32 14L48 22L32 30L16 22Z" fill="#1E293B"/>
+                <path d="M46 23V32" stroke="#FBBF24" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="25" cy="34" r="3.5" fill="#0F172A"/>
+                <circle cx="39" cy="34" r="3.5" fill="#0F172A"/>
+                <circle cx="26" cy="33" r="1.2" fill="#FFFFFF"/>
+                <circle cx="40" cy="33" r="1.2" fill="#FFFFFF"/>
+                <path d="M28.5 40L32 45L35.5 40H28.5Z" fill="#F59E0B"/>
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <h1 class="font-extrabold text-base text-slate-800 leading-tight tracking-tight truncate">Almazaya MathQuest</h1>
+              <p class="text-[11px] font-semibold text-skyquest-600 truncate">Mr. Taqwa's Class</p>
+            </div>
+          </div>
+
+          <!-- Navigation Tabs -->
+          <nav class="space-y-1.5" aria-label="Main Lesson Navigation">
+            <button type="button" onclick="switchTab('home')" data-tab-btn="home" class="sidebar-tab-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-bold bg-skyquest-50 text-skyquest-700 transition-all text-left">
+              <span class="w-6 text-center text-base">🏠</span>
+              <span>Home</span>
+            </button>
+
+            <button type="button" onclick="switchTab('notes')" data-tab-btn="notes" class="sidebar-tab-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all text-left">
+              <span class="w-6 text-center text-base">📖</span>
+              <span>Core Notes</span>
+            </button>
+
+            <button type="button" onclick="switchTab('examples')" data-tab-btn="examples" class="sidebar-tab-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all text-left">
+              <span class="w-6 text-center text-base">💡</span>
+              <span>Examples</span>
+            </button>
+
+            <button type="button" onclick="switchTab('challenge')" data-tab-btn="challenge" class="sidebar-tab-btn w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all text-left">
+              <div class="flex items-center gap-3">
+                <span class="w-6 text-center text-base">🏆</span>
+                <span>Challenge Arena</span>
+              </div>
+              <span id="sidebar-quest-badge" class="px-2 py-0.5 text-[11px] font-extrabold rounded-full bg-amber-100 text-amber-700">0/5</span>
+            </button>
+
+            <button type="button" onclick="switchTab('teaser')" data-tab-btn="teaser" class="sidebar-tab-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-all text-left">
+              <span class="w-6 text-center text-base">🔮</span>
+              <span>Tuesday Teaser</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Bottom Section: Tuesday PLSV Promo Card + Mr. Taqwa Class Profile -->
+        <div class="space-y-3 pt-4 border-t border-slate-100">
+          <!-- Lingora-inspired Promo Card -->
+          <div class="rounded-2xl bg-gradient-to-br from-sky-50 via-skyquest-100/70 to-blue-100/70 p-3.5 border border-skyquest-200/80 text-center">
+            <div class="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-600 flex items-center justify-center mx-auto mb-2 text-lg">
+              👑
+            </div>
+            <p class="text-xs font-extrabold text-slate-800">70:30 Mastery Mix</p>
+            <p class="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+              Prepares Grade 7.4 for Tuesday's PLSV Supervision!
+            </p>
+            <button type="button" onclick="switchTab('challenge')" class="mt-2.5 w-full py-2 px-3 rounded-xl bg-skyquest-600 hover:bg-skyquest-700 text-white text-xs font-bold shadow-xs transition-all">
+              Enter Arena →
+            </button>
+          </div>
+
+          <!-- Mr. Taqwa's Class Profile Card -->
+          <div class="flex items-center justify-between p-2.5 rounded-2xl bg-slate-50 border border-slate-100">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-skyquest-600 to-blue-500 text-white font-extrabold text-xs flex items-center justify-center shrink-0 shadow-xs">
+                MT
+              </div>
+              <div class="min-w-0">
+                <p class="text-xs font-extrabold text-slate-800 truncate">Mr. Taqwa</p>
+                <p class="text-[10px] font-semibold text-slate-500 truncate">Grade 7.4 • SMP Almazaya</p>
+              </div>
+            </div>
+            <button type="button" onclick="toggleSound()" id="sound-toggle-desktop" title="Toggle Sound Effects" class="p-1.5 rounded-xl hover:bg-white text-slate-600 text-sm transition-colors">
+              🔊
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ===================================================================
+           COLUMN 2: CENTER MAIN CONTENT AREA (Header + 5 Dynamic Tabs)
+           =================================================================== -->
+      <main class="space-y-4 sm:space-y-5 min-w-0">
+
+        <!-- TOP HEADER BAR (Responsive for both 16:9 Projector & Smartphone) -->
+        <header class="bg-white rounded-2xl sm:rounded-3xl px-4 py-3 shadow-card border border-slate-100 flex flex-wrap items-center justify-between gap-2.5">
+          <!-- Left: Mobile Brand + Current View Indicator -->
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div class="lg:hidden w-9 h-9 rounded-xl bg-gradient-to-br from-skyquest-500 to-blue-600 text-white font-extrabold flex items-center justify-center text-xs shrink-0 shadow-xs">
+              7.4
+            </div>
+            <div class="min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-skyquest-50 text-skyquest-700 border border-skyquest-200/70">
+                  SMP Almazaya Islamic School
+                </span>
+                <span id="header-tab-subtitle" class="hidden sm:inline-block text-xs font-semibold text-slate-400">
+                  Monday Session • 2 JP (80 Mins)
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Streak, Gems, 16:9 Projector Focus Mode & Mobile Quick Teacher Mode -->
+          <div class="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+            <!-- 16:9 Projector Focus Mode Button -->
+            <button type="button" onclick="toggleProjectorMode()" id="projector-mode-btn" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-200/80 transition-all flex items-center gap-1.5" title="Enlarge text for classroom 16:9 projector">
+              <span>🖥️</span>
+              <span id="projector-btn-label" class="hidden sm:inline">16:9 Projector Focus</span>
+              <span class="sm:hidden">Focus</span>
+            </button>
+
+            <!-- Mobile Quick Teacher Mode Toggle -->
+            <button type="button" onclick="toggleTeacherMode()" id="mobile-teacher-toggle-btn" class="lg:hidden px-2.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200 transition-all">
+              👨‍🏫 Key: OFF
+            </button>
+
+            <!-- Warm Amber Streak Counter -->
+            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-700 font-extrabold text-xs sm:text-sm" title="Class Streak">
+              <span>🔥</span>
+              <span id="streak-counter">1 Day</span>
+            </div>
+
+            <!-- Blue Gem Counter -->
+            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-50 border border-sky-200/80 text-skyquest-700 font-extrabold text-xs sm:text-sm" title="Earned Gems">
+              <span>💎</span>
+              <span id="gem-counter">0</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- =================================================================
+             TAB 1: HOME VIEW
+             ================================================================= -->
+        <section id="tab-home" class="tab-panel tab-panel-active space-y-5">
+
+          <!-- Hero Banner (Duolingo / Lingora Sky-Blue Gradient Style) -->
+          <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-sky-200/90 via-skyquest-100 to-blue-100 p-5 sm:p-7 border border-skyquest-200 shadow-soft">
+            <!-- Decorative soft clouds & sparkles -->
+            <div class="absolute -right-10 -top-10 w-48 h-48 rounded-full bg-white/50 blur-xl pointer-events-none"></div>
+            <div class="absolute left-1/4 -bottom-12 w-56 h-32 rounded-full bg-sky-300/30 blur-xl pointer-events-none"></div>
+
+            <div class="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div class="text-center sm:text-left max-w-xl">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/85 backdrop-blur-xs text-skyquest-800 text-xs font-extrabold mb-3 shadow-2xs">
+                  <span>🕌</span>
+                  <span>Grade 7.4 • Algebraic Word Problems</span>
+                </div>
+
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight leading-snug">
+                  Assalamu'alaikum, <span class="text-skyquest-600">Grade 7.4!</span> Ready for Mr. Taqwa's Algebra Mission? 👋
+                </h2>
+
+                <p class="text-sm sm:text-base text-slate-600 mt-2.5 leading-relaxed">
+                  Hari ini kita gabungkan <strong>pemodelan cerita (modeling)</strong>, <strong>penyederhanaan (simplification)</strong>, dan <strong>substitusi (substitution)</strong> sebelum menghadapi Misi Rahasia PLSV besok!
+                </p>
+
+                <div class="mt-5 flex flex-wrap items-center justify-center sm:justify-start gap-3">
+                  <button type="button" onclick="switchTab('notes')" class="px-6 py-3 rounded-full bg-skyquest-600 hover:bg-skyquest-700 text-white font-extrabold text-sm shadow-pill transition-all inline-flex items-center gap-2 cursor-pointer">
+                    <span>Start Lesson</span>
+                    <span>→</span>
+                  </button>
+                  <button type="button" onclick="switchTab('challenge')" class="px-5 py-3 rounded-full bg-white/90 hover:bg-white text-skyquest-800 font-bold text-sm border border-skyquest-200 transition-all cursor-pointer">
+                    🏆 Challenge Arena
+                  </button>
+                </div>
+              </div>
+
+              <!-- Friendly Blue Scholar Bird Mascot SVG -->
+              <div class="shrink-0 animate-mascot">
+                <svg class="w-36 h-36 sm:w-44 sm:h-44 drop-shadow-md" viewBox="0 0 210 210" fill="none" aria-label="Almazaya Scholar Falcon Mascot">
+                  <!-- Ground Shadow -->
+                  <ellipse cx="105" cy="186" rx="58" ry="12" fill="#7DD3FC" opacity="0.55"/>
+                  <!-- Scholar Books Stack under Mascot -->
+                  <rect x="62" y="168" width="86" height="12" rx="4" fill="#0284C7"/>
+                  <rect x="66" y="170" width="78" height="8" rx="2" fill="#F8FAFC"/>
+                  <rect x="68" y="156" width="74" height="12" rx="4" fill="#F59E0B"/>
+                  <rect x="72" y="158" width="66" height="8" rx="2" fill="#FEF3C7"/>
+
+                  <!-- Bird Body -->
+                  <ellipse cx="105" cy="112" rx="44" ry="48" fill="#0284C7"/>
+                  <ellipse cx="105" cy="118" rx="31" ry="37" fill="#F0F9FF"/>
+
+                  <!-- Left Waving Wing -->
+                  <path d="M62 102C37 88 29 66 42 58C52 52 66 74 70 94" fill="#0369A1"/>
+                  <!-- Right Wing holding Algebra Card -->
+                  <path d="M148 102C168 106 175 123 163 133C152 141 142 125 140 113" fill="#0369A1"/>
+
+                  <!-- Warm Amber Scarf -->
+                  <path d="M70 132C90 142 120 142 140 132L144 144C120 154 90 154 66 144L70 132Z" fill="#FBBF24"/>
+                  <path d="M128 140L150 159L136 165L120 144Z" fill="#F59E0B"/>
+
+                  <!-- Expressive Eyes -->
+                  <circle cx="89" cy="90" r="11.5" fill="#FFFFFF"/>
+                  <circle cx="121" cy="90" r="11.5" fill="#FFFFFF"/>
+                  <circle cx="91" cy="90" r="5.5" fill="#0F172A"/>
+                  <circle cx="119" cy="90" r="5.5" fill="#0F172A"/>
+                  <circle cx="93" cy="88" r="2" fill="#FFFFFF"/>
+                  <circle cx="121" cy="88" r="2" fill="#FFFFFF"/>
+
+                  <!-- Beak -->
+                  <path d="M97 102L105 113L113 102H97Z" fill="#F59E0B"/>
+
+                  <!-- Scholar Mortarboard Cap -->
+                  <path d="M62 66L105 46L148 66L105 84L62 66Z" fill="#1E293B"/>
+                  <rect x="83" y="72" width="44" height="10" rx="4" fill="#334155"/>
+                  <path d="M144 67V88" stroke="#FBBF24" stroke-width="3" stroke-linecap="round"/>
+                  <circle cx="144" cy="90" r="3.5" fill="#F59E0B"/>
+
+                  <!-- Floating Math Tile -->
+                  <g transform="translate(154, 34)">
+                    <rect width="40" height="36" rx="10" fill="#FFFFFF" stroke="#BAE6FD" stroke-width="2"/>
+                    <text x="20" y="23" text-anchor="middle" fill="#0284C7" font-family="monospace" font-weight="bold" font-size="15">3x+4</text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Continue Learning Card (Lingora Style) -->
+          <div class="bg-white rounded-3xl p-5 shadow-card border border-slate-100">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="font-extrabold text-slate-800 text-base">Continue Learning</h3>
+              <span class="text-xs font-bold text-skyquest-600">70:30 Algebra Mix</span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-2xl bg-slate-50/90 border border-slate-100">
+              <div class="flex items-center gap-4 min-w-0 flex-1 w-full">
+                <!-- Thumbnail Icon -->
+                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-skyquest-500 to-indigo-500 text-white flex flex-col items-center justify-center shrink-0 shadow-xs">
+                  <span class="math-expr font-extrabold text-sm">ax±b</span>
+                  <span class="text-[10px] font-semibold opacity-90">Unit 3</span>
+                </div>
+
+                <div class="min-w-0 flex-1">
+                  <h4 class="font-extrabold text-slate-800 text-sm sm:text-base truncate">
+                    Algebra in Real Life: Word Problems &amp; Substitution
+                  </h4>
+                  <p class="text-xs text-slate-500 mt-0.5">
+                    Unit 3 • Monday Session (Mr. Taqwa's Class)
+                  </p>
+                  <div class="flex items-center gap-3 mt-2.5">
+                    <div class="flex-1 bg-slate-200/80 h-2.5 rounded-full overflow-hidden">
+                      <div id="home-continue-bar" class="bg-skyquest-600 h-full rounded-full transition-all duration-500" style="width: 15%"></div>
+                    </div>
+                    <span id="home-continue-pct" class="text-xs font-extrabold text-skyquest-700 shrink-0">15%</span>
+                  </div>
+                </div>
+              </div>
+
+              <button type="button" onclick="switchTab('notes')" class="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-skyquest-600 hover:bg-skyquest-700 text-white font-bold text-xs sm:text-sm shadow-xs transition-all shrink-0 cursor-pointer">
+                ▶ Continue
+              </button>
+            </div>
+          </div>
+
+          <!-- Build Your Skills 4-Card Grid -->
+          <div class="bg-white rounded-3xl p-5 shadow-card border border-slate-100">
+            <div class="flex items-center justify-between mb-3.5">
+              <h3 class="font-extrabold text-slate-800 text-base">Build Your Skills</h3>
+              <span class="text-xs font-semibold text-slate-400">4 Core Algebra Tools</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3.5">
+              <!-- Skill 1: Modeling -->
+              <button type="button" onclick="switchTab('notes')" class="group text-left p-4 rounded-2xl bg-purple-50/80 hover:bg-purple-100/80 border border-purple-100 transition-all cursor-pointer">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center text-lg shadow-2xs">
+                    🧩
+                  </div>
+                  <span class="text-purple-600 font-bold text-sm group-hover:translate-x-1 transition-transform">→</span>
+                </div>
+                <h4 class="font-extrabold text-purple-950 text-sm">Modeling</h4>
+                <p class="text-xs font-semibold text-purple-700/80 mt-0.5">Pemodelan Cerita</p>
+                <p class="text-[11px] text-purple-900/70 mt-1.5">Story words &rarr; <span class="math-expr font-bold">3x + 4</span></p>
+              </button>
+
+              <!-- Skill 2: Substitution -->
+              <button type="button" onclick="switchTab('examples')" class="group text-left p-4 rounded-2xl bg-sky-50/90 hover:bg-sky-100/80 border border-sky-100 transition-all cursor-pointer">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="w-10 h-10 rounded-xl bg-skyquest-600 text-white flex items-center justify-center text-lg shadow-2xs">
+                    🔢
+                  </div>
+                  <span class="text-skyquest-600 font-bold text-sm group-hover:translate-x-1 transition-transform">→</span>
+                </div>
+                <h4 class="font-extrabold text-sky-950 text-sm">Substitution</h4>
+                <p class="text-xs font-semibold text-sky-700/80 mt-0.5">Substitusi Nilai</p>
+                <p class="text-[11px] text-sky-900/70 mt-1.5">Plug in <span class="math-expr font-bold">x = 12</span></p>
+              </button>
+
+              <!-- Skill 3: Like Terms -->
+              <button type="button" onclick="switchTab('challenge')" class="group text-left p-4 rounded-2xl bg-emerald-50/80 hover:bg-emerald-100/80 border border-emerald-100 transition-all cursor-pointer">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xs math-expr font-extrabold shadow-2xs">
+                    3x+2x
+                  </div>
+                  <span class="text-emerald-600 font-bold text-sm group-hover:translate-x-1 transition-transform">→</span>
+                </div>
+                <h4 class="font-extrabold text-emerald-950 text-sm">Like Terms</h4>
+                <p class="text-xs font-semibold text-emerald-700/80 mt-0.5">Suku Sejenis</p>
+                <p class="text-[11px] text-emerald-900/70 mt-1.5">Combine <span class="math-expr font-bold">3x + 2x = 5x</span></p>
+              </button>
+
+              <!-- Skill 4: Distributive -->
+              <button type="button" onclick="switchTab('challenge')" class="group text-left p-4 rounded-2xl bg-amber-50/80 hover:bg-amber-100/80 border border-amber-100 transition-all cursor-pointer">
+                <div class="flex items-center justify-between mb-3">
+                  <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-xs math-expr font-extrabold shadow-2xs">
+                    a(b+c)
+                  </div>
+                  <span class="text-amber-600 font-bold text-sm group-hover:translate-x-1 transition-transform">→</span>
+                </div>
+                <h4 class="font-extrabold text-amber-950 text-sm">Distributive</h4>
+                <p class="text-xs font-semibold text-amber-700/80 mt-0.5">Sifat Distributif</p>
+                <p class="text-[11px] text-amber-900/70 mt-1.5">Expand <span class="math-expr font-bold">3(2y+4)</span></p>
+              </button>
+            </div>
+          </div>
+
+          <!-- 5-Phase Lesson Timeline (Monday 2 JP = 80 Minutes) -->
+          <div class="bg-white rounded-3xl p-5 shadow-card border border-slate-100">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <div>
+                <h3 class="font-extrabold text-slate-800 text-base">5-Phase Lesson Timeline (2 JP = 80 Mins)</h3>
+                <p class="text-xs text-slate-500">Alur belajar kelas 7.4 bersama Mr. Taqwa hari Senin</p>
+              </div>
+              <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-bold">80 Minutes Total</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-5 gap-2.5">
+              <div class="p-3 rounded-2xl bg-sky-50 border border-sky-100">
+                <span class="inline-block px-2 py-0.5 rounded-md bg-skyquest-600 text-white text-[10px] font-extrabold mb-1.5">10 Mins</span>
+                <p class="text-xs font-extrabold text-slate-800">1. Warm-Up</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Apersepsi &amp; jembatan konsep</p>
+              </div>
+
+              <div class="p-3 rounded-2xl bg-indigo-50 border border-indigo-100">
+                <span class="inline-block px-2 py-0.5 rounded-md bg-indigo-600 text-white text-[10px] font-extrabold mb-1.5">15 Mins</span>
+                <p class="text-xs font-extrabold text-slate-800">2. Core Notes</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Catat 3 langkah di buku</p>
+              </div>
+
+              <div class="p-3 rounded-2xl bg-purple-50 border border-purple-100">
+                <span class="inline-block px-2 py-0.5 rounded-md bg-purple-600 text-white text-[10px] font-extrabold mb-1.5">20 Mins</span>
+                <p class="text-xs font-extrabold text-slate-800">3. Guided Examples</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Diskusi contoh soal bertahap</p>
+              </div>
+
+              <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200">
+                <span class="inline-block px-2 py-0.5 rounded-md bg-amber-500 text-white text-[10px] font-extrabold mb-1.5">30 Mins</span>
+                <p class="text-xs font-extrabold text-slate-800">4. Challenge Arena</p>
+                <p class="text-[11px] text-slate-600 mt-0.5">5 Quests (70:30 Mix)</p>
+              </div>
+
+              <div class="p-3 rounded-2xl bg-slate-800 text-white">
+                <span class="inline-block px-2 py-0.5 rounded-md bg-sky-400 text-slate-950 text-[10px] font-extrabold mb-1.5">5 Mins</span>
+                <p class="text-xs font-extrabold">5. PLSV Bridge</p>
+                <p class="text-[11px] text-slate-300 mt-0.5">Teaser Misi Selasa</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================
+             TAB 2: CORE NOTES VIEW (Materi Inti — Board Notes)
+             ================================================================= -->
+        <section id="tab-notes" class="tab-panel hidden space-y-5">
+
+          <!-- Notebook / Whiteboard Card -->
+          <div class="bg-white rounded-3xl p-5 sm:p-7 shadow-card border border-slate-100 notebook-surface">
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-5 border-b-2 border-skyquest-100">
+              <div>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-skyquest-100 text-skyquest-800 text-xs font-extrabold mb-1">
+                  <span>✍️</span>
+                  <span>Whiteboard Notes • Catatan Buku Tulis</span>
+                </span>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-800">
+                  Solving Algebraic Word Problems (3-Step Method)
+                </h2>
+              </div>
+
+              <button type="button" onclick="copyBoardNotes()" class="px-4 py-2.5 rounded-2xl bg-skyquest-600 hover:bg-skyquest-700 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-2 cursor-pointer">
+                <span>📋</span>
+                <span>Copy Board Notes</span>
+              </button>
+            </div>
+
+            <!-- Main Concept Callout -->
+            <div class="p-4 rounded-2xl bg-skyquest-50/90 border border-skyquest-200/80 mb-6">
+              <p class="text-sm sm:text-base text-slate-700 leading-relaxed">
+                <strong>💡 Main Concept (Konsep Utama):</strong> Algebra helps us model real-life stories that have an <strong>unknown quantity (variable)</strong>, simplify the expression, and calculate the final value once the number is revealed!
+              </p>
+            </div>
+
+            <!-- Bilingual 3-Step Method Cards -->
+            <div class="space-y-4">
+              <!-- Step 1 -->
+              <div class="p-4 sm:p-5 rounded-2xl bg-white/95 border-l-4 border-l-skyquest-600 border border-slate-200/80 shadow-2xs">
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="w-8 h-8 rounded-xl bg-skyquest-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">1</span>
+                  <div>
+                    <h3 class="font-extrabold text-slate-800 text-base sm:text-lg">Step 1 — Identify the Unknown (Identifikasi Variabel)</h3>
+                  </div>
+                </div>
+                <p class="text-sm text-slate-600 leading-relaxed pl-11">
+                  Represent unknown quantities with a lowercase variable letter such as <span class="math-expr font-bold text-skyquest-700 bg-skyquest-50 px-2 py-0.5 rounded">x, y, p, d, m</span>.
+                  <br>
+                  <span class="text-slate-500 text-xs sm:text-sm italic">Contoh: Misalkan <span class="math-expr font-semibold not-italic">x</span> = jumlah spidol dalam 1 kotak.</span>
+                </p>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="p-4 sm:p-5 rounded-2xl bg-white/95 border-l-4 border-l-indigo-600 border border-slate-200/80 shadow-2xs">
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">2</span>
+                  <div>
+                    <h3 class="font-extrabold text-slate-800 text-base sm:text-lg">Step 2 — Model &amp; Simplify (Susun &amp; Sederhanakan Bentuk Aljabar)</h3>
+                  </div>
+                </div>
+                <p class="text-sm text-slate-600 leading-relaxed pl-11">
+                  Convert story keywords into math operations (<span class="math-expr font-bold">+</span>, <span class="math-expr font-bold">−</span>, multiplication), and simplify using <strong>Like Terms (Suku Sejenis)</strong> or <strong>Distributive Property (Sifat Distributif)</strong> when needed.
+                  <br>
+                  <span class="text-slate-500 text-xs sm:text-sm italic">Contoh: <span class="math-expr font-semibold not-italic">(3x + 5) + 2x − 2 = 5x + 3</span> atau <span class="math-expr font-semibold not-italic">3(2y + 4) = 6y + 12</span>.</span>
+                </p>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="p-4 sm:p-5 rounded-2xl bg-white/95 border-l-4 border-l-emerald-600 border border-slate-200/80 shadow-2xs">
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="w-8 h-8 rounded-xl bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">3</span>
+                  <div>
+                    <h3 class="font-extrabold text-slate-800 text-base sm:text-lg">Step 3 — Substitute &amp; Calculate (Substitusi &amp; Hitung)</h3>
+                  </div>
+                </div>
+                <p class="text-sm text-slate-600 leading-relaxed pl-11">
+                  Replace the variable with the given number and compute the final answer carefully.
+                  <br>
+                  <span class="text-slate-500 text-xs sm:text-sm italic">Contoh: Jika <span class="math-expr font-semibold not-italic">x = 12</span>, maka <span class="math-expr font-semibold not-italic">3(12) + 4 = 36 + 4 = 40</span>.</span>
+                </p>
+              </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+              <button type="button" onclick="switchTab('examples')" class="px-5 py-2.5 rounded-2xl bg-skyquest-600 hover:bg-skyquest-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-all cursor-pointer">
+                Next: Guided Examples →
+              </button>
+            </div>
+          </div>
+
+          <!-- Bilingual Math Keyword Translator Cards -->
+          <div class="bg-white rounded-3xl p-5 sm:p-6 shadow-card border border-slate-100">
+            <div class="mb-4">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-skyquest-600">Bilingual Dictionary</span>
+              <h3 class="text-lg font-extrabold text-slate-800">Math Keyword Translator (English ↔ Bahasa Indonesia ↔ Symbol)</h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <!-- Card 1: Addition -->
+              <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 flex items-center justify-between gap-3">
+                <div>
+                  <span class="text-[11px] font-extrabold uppercase text-emerald-700">Addition / Penjumlahan</span>
+                  <p class="text-sm font-extrabold text-slate-800 mt-0.5">Added, Bonus, Bought more</p>
+                  <p class="text-xs text-slate-600">Beli lagi, ditambah, bonus ekstra</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white math-expr font-extrabold text-2xl flex items-center justify-center shrink-0 shadow-2xs">
+                  +
+                </div>
+              </div>
+
+              <!-- Card 2: Subtraction -->
+              <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-200/80 flex items-center justify-between gap-3">
+                <div>
+                  <span class="text-[11px] font-extrabold uppercase text-rose-700">Subtraction / Pengurangan</span>
+                  <p class="text-sm font-extrabold text-slate-800 mt-0.5">Eaten, Taken, Spent, Left</p>
+                  <p class="text-xs text-slate-600">Dimakan, diambil, sisa, dipakai</p>
+                </div>
+                <div class="w-12 h-12 rounded-2xl bg-rose-600 text-white math-expr font-extrabold text-2xl flex items-center justify-center shrink-0 shadow-2xs">
+                  −
+                </div>
+              </div>
+
+              <!-- Card 3: Like Terms -->
+              <div class="p-4 rounded-2xl bg-sky-50/70 border border-sky-200/80 flex items-center justify-between gap-3">
+                <div>
+                  <span class="text-[11px] font-extrabold uppercase text-skyquest-700">Like Terms / Suku Sejenis</span>
+                  <p class="text-sm font-extrabold text-slate-800 mt-0.5">Combine same variable</p>
+                  <p class="text-xs text-slate-600">Gabungkan variabel yang sama (<span class="math-expr font-bold">3x + 2x</span>)</p>
+                </div>
+                <div class="px-3 h-12 rounded-2xl bg-skyquest-600 text-white math-expr font-extrabold text-sm flex items-center justify-center shrink-0 shadow-2xs">
+                  5x
+                </div>
+              </div>
+
+              <!-- Card 4: Distributive Property -->
+              <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 flex items-center justify-between gap-3">
+                <div>
+                  <span class="text-[11px] font-extrabold uppercase text-amber-700">Distributive / Sifat Distributif</span>
+                  <p class="text-sm font-extrabold text-slate-800 mt-0.5">Groups of, Each group brings</p>
+                  <p class="text-xs text-slate-600">Setiap kelompok membawa (<span class="math-expr font-bold">3(2y + 4)</span>)</p>
+                </div>
+                <div class="px-3 h-12 rounded-2xl bg-amber-500 text-white math-expr font-extrabold text-xs flex items-center justify-center shrink-0 shadow-2xs">
+                  6y+12
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================
+             TAB 3: GUIDED EXAMPLES VIEW (Step-by-Step Reveal)
+             ================================================================= -->
+        <section id="tab-examples" class="tab-panel hidden space-y-5">
+          <div class="bg-white rounded-3xl p-5 sm:p-7 shadow-card border border-slate-100">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+              <div>
+                <span class="text-xs font-extrabold uppercase tracking-wider text-skyquest-600">Interactive Whiteboard Discussion</span>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-800">Guided Examples (Step-by-Step Reveal)</h2>
+                <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Ask Grade 7.4 verbally first, then click each button to reveal the step on the projector!</p>
+              </div>
+            </div>
+
+            <!-- Interactive Switcher Tabs -->
+            <div class="flex flex-wrap gap-2.5 mb-5">
+              <button type="button" onclick="selectExample(1)" id="example-switch-1" class="px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-extrabold bg-skyquest-600 text-white shadow-xs transition-all cursor-pointer">
+                Example 1: Addition (Budi's Pencils)
+              </button>
+              <button type="button" onclick="selectExample(2)" id="example-switch-2" class="px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer">
+                Example 2: Subtraction (Siti's Candies)
+              </button>
+            </div>
+
+            <!-- Dynamic Example Display Card -->
+            <div id="example-display-box" class="rounded-3xl bg-slate-50 border border-slate-200/80 p-5 sm:p-6">
+              <!-- Populated dynamically by JS -->
+            </div>
+
+            <div class="mt-6 flex items-center justify-between flex-wrap gap-3">
+              <button type="button" onclick="switchTab('notes')" class="px-4 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-bold transition-all cursor-pointer">
+                ← Back to Core Notes
+              </button>
+              <button type="button" onclick="switchTab('challenge')" class="px-5 py-2.5 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white text-xs sm:text-sm font-extrabold shadow-xs transition-all cursor-pointer">
+                Ready for Challenge Arena! 🏆 →
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================
+             TAB 4: CHALLENGE ARENA VIEW (5 Interactive 70:30 Challenges)
+             ================================================================= -->
+        <section id="tab-challenge" class="tab-panel hidden space-y-5">
+
+          <!-- Mr. Taqwa's Golden Rule Banner -->
+          <div class="rounded-3xl bg-gradient-to-r from-amber-100 via-amber-50 to-orange-100 border border-amber-200 p-5 shadow-soft flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-2xl shrink-0 shadow-xs">
+              🙌
+            </div>
+            <div>
+              <span class="inline-block px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-900 text-[11px] font-extrabold uppercase tracking-wider mb-1">
+                Mr. Taqwa's Golden Rule
+              </span>
+              <h2 class="text-base sm:text-lg font-extrabold text-amber-950 leading-snug">
+                It's a CHALLENGE, not a test! Discussing with your seatmate &amp; raising your hand to ask Mr. Taqwa is 100% ALLOWED! 🙌
+              </h2>
+              <p class="text-xs sm:text-sm text-amber-900/80 mt-1">
+                Solve all 5 quests (+50 💎 Gems each). Quests 1–3 build your core foundation (70%), while Quests 4–5 level up your Like Terms &amp; Distributive skills (30%)!
+              </p>
+            </div>
+          </div>
+
+          <!-- Filter & Progress Header -->
+          <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-card border border-slate-100 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" onclick="filterChallenges('all')" data-filter-btn="all" class="challenge-filter-btn px-3.5 py-2 rounded-xl text-xs font-extrabold bg-skyquest-600 text-white transition-all cursor-pointer">
+                All 5 Quests
+              </button>
+              <button type="button" onclick="filterChallenges('core')" data-filter-btn="core" class="challenge-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer">
+                Core 70% (Q1–Q3)
+              </button>
+              <button type="button" onclick="filterChallenges('levelup')" data-filter-btn="levelup" class="challenge-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all cursor-pointer">
+                Level Up 30% (Q4–Q5)
+              </button>
+            </div>
+
+            <div class="text-xs font-extrabold text-slate-600">
+              Completed: <span id="arena-solved-count" class="text-skyquest-600">0</span> / 5 Quests
+            </div>
+          </div>
+
+          <!-- 5 Interactive Challenge Cards Container -->
+          <div id="challenge-cards-container" class="space-y-5">
+            <!-- Rendered by JavaScript -->
+          </div>
+        </section>
+
+        <!-- =================================================================
+             TAB 5: TUESDAY TEASER VIEW (Bridge to PLSV Supervision)
+             ================================================================= -->
+        <section id="tab-teaser" class="tab-panel hidden space-y-5">
+          <div class="rounded-3xl bg-gradient-to-br from-slate-900 via-skyquest-900 to-indigo-950 text-white p-6 sm:p-8 shadow-lg relative overflow-hidden">
+            <div class="absolute -right-12 -top-12 w-56 h-56 rounded-full bg-sky-400/15 blur-2xl pointer-events-none"></div>
+            <div class="absolute -left-12 -bottom-12 w-56 h-56 rounded-full bg-amber-400/10 blur-2xl pointer-events-none"></div>
+
+            <div class="relative z-10">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-sky-300 text-xs font-extrabold mb-3">
+                <span>🔮</span>
+                <span>5-Minute Closing Bridge • Tuesday's PLSV Mission</span>
+              </div>
+
+              <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                Reverse the Mystery! (Balik Tantangannya!)
+              </h2>
+              <p class="text-sm sm:text-base text-slate-300 mt-2 max-w-2xl leading-relaxed">
+                Look at how today's Algebra Substitution connects directly to tomorrow's <strong>Persamaan Linear Satu Variabel (PLSV)</strong> mission with Mr. Taqwa!
+              </p>
+
+              <!-- Side-by-Side Comparison Cards -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                <!-- Monday Card -->
+                <div class="rounded-2xl bg-white/10 backdrop-blur-xs border border-white/15 p-5">
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="px-2.5 py-1 rounded-lg bg-sky-500/20 text-sky-300 text-xs font-extrabold">MONDAY (Today)</span>
+                    <span class="text-xs font-bold text-slate-300">Substitution</span>
+                  </div>
+                  <h3 class="font-extrabold text-lg text-white">Box is OPEN 📦</h3>
+                  <p class="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
+                    Alya buys <span class="math-expr font-bold text-sky-300">3x + 4</span> markers. We already know 1 box has <span class="math-expr font-bold text-amber-300">x = 12</span> markers.
+                  </p>
+                  <div class="mt-4 p-3 rounded-xl bg-slate-950/50 border border-white/10 math-expr text-sm">
+                    <div class="text-slate-400">Find the Total:</div>
+                    <div class="text-emerald-300 font-bold mt-1">3(12) + 4 = 36 + 4 = 40</div>
+                  </div>
+                </div>
+
+                <!-- Tuesday Card -->
+                <div class="rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/15 backdrop-blur-xs border border-amber-400/40 p-5">
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="px-2.5 py-1 rounded-lg bg-amber-400 text-slate-950 text-xs font-extrabold">TUESDAY (Tomorrow)</span>
+                    <span class="text-xs font-bold text-amber-200">PLSV Mission</span>
+                  </div>
+                  <h3 class="font-extrabold text-lg text-white">Mystery Box is SEALED 🔒</h3>
+                  <p class="text-xs sm:text-sm text-amber-100/90 mt-1.5 leading-relaxed">
+                    Mr. Taqwa only tells you the total is <span class="math-expr font-bold text-white">3x + 4 = 40</span>. Can you find the hidden <span class="math-expr font-bold text-amber-300">x</span> inside the sealed box?
+                  </p>
+
+                  <!-- Interactive Guess + Peek Inside Mystery Box -->
+                  <div class="mt-4 p-3.5 rounded-xl bg-slate-950/60 border border-amber-300/30">
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span class="math-expr text-sm font-bold text-amber-300">3x + 4 = 40 &rarr; x =</span>
+                      <input type="number" inputmode="numeric" id="mystery-box-input" placeholder="?" class="w-20 px-2.5 py-1.5 rounded-lg bg-white text-slate-900 font-extrabold text-center text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
+                      <button type="button" onclick="checkMysteryGuess()" class="px-3.5 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs transition-colors cursor-pointer">
+                        Test
+                      </button>
+                      <button type="button" onclick="toggleMysteryPeek()" id="peek-mystery-btn" class="px-3.5 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white font-bold text-xs transition-colors cursor-pointer">
+                        👀 Peek Inside Mystery Box
+                      </button>
+                    </div>
+
+                    <div id="mystery-guess-feedback" class="hidden mt-2.5 text-xs font-bold"></div>
+
+                    <!-- Hidden Peek Box Reveal -->
+                    <div id="mystery-peek-panel" class="hidden mt-3 pt-3 border-t border-white/15 text-xs sm:text-sm text-sky-200 space-y-1 animate-pop">
+                      <p class="font-extrabold text-amber-300">🔓 Inside the Sealed Mystery Box:</p>
+                      <p class="math-expr">3x + 4 = 40</p>
+                      <p class="math-expr">3x = 40 − 4 = 36</p>
+                      <p class="math-expr">x = 36 ÷ 3 = <span class="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-extrabold">12 markers/box!</span></p>
+                      <p class="text-[11px] text-slate-300 pt-1">See you tomorrow in Grade 7.4 for our full PLSV Web App Challenge!</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- ===================================================================
+           COLUMN 3: RIGHT WIDGET PANEL (Goal Ring, 80m Timer, Teacher Mode)
+           =================================================================== -->
+      <aside id="right-widget-panel" class="hidden lg:block space-y-4 lg:sticky lg:top-5">
+
+        <!-- Widget 1: Circular Daily Lesson Goal Progress Ring -->
+        <div class="bg-white rounded-3xl p-5 shadow-card border border-slate-100">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-extrabold text-slate-800 text-base">Daily Lesson Goal</h3>
+            <span class="px-2.5 py-0.5 rounded-full bg-skyquest-50 text-skyquest-700 text-[11px] font-extrabold">Grade 7.4</span>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <!-- SVG Circular Ring -->
+            <div class="relative w-24 h-24 shrink-0 flex items-center justify-center">
+              <svg class="w-24 h-24 -rotate-90" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" stroke="#E2E8F0" stroke-width="10" fill="none" />
+                <circle id="goal-ring-circle" cx="50" cy="50" r="40" stroke="#0284C7" stroke-width="10" fill="none"
+                        stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round"
+                        class="transition-all duration-500 ease-out" />
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span class="text-sm">🔥</span>
+                <span id="goal-ring-count" class="text-sm font-extrabold text-slate-800 leading-tight">0 / 5</span>
+                <span class="text-[10px] font-bold text-slate-400">Quests</span>
+              </div>
+            </div>
+
+            <div class="min-w-0">
+              <p id="goal-status-title" class="font-extrabold text-slate-800 text-sm">Keep going, 7.4!</p>
+              <p id="goal-status-desc" class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Solve all 5 challenges to earn <strong>250 💎 Gems</strong> today.
+              </p>
+            </div>
+          </div>
+
+          <!-- 5 Quest Status Pills (Mon–Fri style dots inspired by Lingora) -->
+          <div class="grid grid-cols-5 gap-1.5 mt-4 pt-4 border-t border-slate-100 text-center">
+            <div id="quest-dot-1" class="flex flex-col items-center gap-1">
+              <div class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 font-extrabold text-xs flex items-center justify-center transition-all">1</div>
+              <span class="text-[10px] font-bold text-slate-400">Q1</span>
+            </div>
+            <div id="quest-dot-2" class="flex flex-col items-center gap-1">
+              <div class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 font-extrabold text-xs flex items-center justify-center transition-all">2</div>
+              <span class="text-[10px] font-bold text-slate-400">Q2</span>
+            </div>
+            <div id="quest-dot-3" class="flex flex-col items-center gap-1">
+              <div class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 font-extrabold text-xs flex items-center justify-center transition-all">3</div>
+              <span class="text-[10px] font-bold text-slate-400">Q3</span>
+            </div>
+            <div id="quest-dot-4" class="flex flex-col items-center gap-1">
+              <div class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 font-extrabold text-xs flex items-center justify-center transition-all">4</div>
+              <span class="text-[10px] font-bold text-amber-600">Q4★</span>
+            </div>
+            <div id="quest-dot-5" class="flex flex-col items-center gap-1">
+              <div class="w-7 h-7 rounded-full bg-slate-100 text-slate-400 font-extrabold text-xs flex items-center justify-center transition-all">5</div>
+              <span class="text-[10px] font-bold text-amber-600">Q5★</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Widget 2: Mr. Taqwa's Teacher Mode (Show Answer Keys) -->
+        <div class="bg-white rounded-3xl p-4 shadow-card border border-slate-100">
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-10 h-10 rounded-2xl bg-skyquest-100 text-skyquest-700 flex items-center justify-center text-lg shrink-0">
+                👨‍🏫
+              </div>
+              <div class="min-w-0">
+                <p class="text-xs font-extrabold text-slate-800 truncate">Mr. Taqwa's Teacher Mode</p>
+                <p class="text-[11px] text-slate-500 truncate">Show Answer Keys on all quests</p>
+              </div>
+            </div>
+
+            <label class="relative inline-flex items-center cursor-pointer shrink-0">
+              <input type="checkbox" id="teacher-mode-checkbox" class="sr-only peer" onchange="toggleTeacherMode(this.checked)">
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-skyquest-600"></div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Widget 3: Interactive 80-Minute (2 JP) Class Timer -->
+        <div class="bg-white rounded-3xl p-5 shadow-card border border-slate-100">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-extrabold text-slate-800 text-sm flex items-center gap-1.5">
+              <span>⏱️</span>
+              <span>80-Minute (2 JP) Class Timer</span>
+            </h3>
+            <span class="text-[11px] font-bold text-skyquest-600 bg-skyquest-50 px-2 py-0.5 rounded-md">2 JP</span>
+          </div>
+
+          <div class="rounded-2xl bg-slate-50 border border-slate-200/70 p-3.5 text-center mb-3">
+            <div id="class-timer-display" class="math-expr text-3xl font-extrabold text-slate-800 tracking-wider">
+              80:00
+            </div>
+            <p id="class-timer-subtitle" class="text-[11px] font-bold text-skyquest-600 mt-0.5">
+              Full 2 JP Session (80 Mins)
+            </p>
+
+            <div class="flex items-center justify-center gap-2 mt-3">
+              <button type="button" onclick="toggleClassTimer()" id="timer-start-pause-btn" class="px-4 py-1.5 rounded-xl bg-skyquest-600 hover:bg-skyquest-700 text-white text-xs font-extrabold transition-colors cursor-pointer">
+                ▶ Start
+              </button>
+              <button type="button" onclick="resetClassTimer()" class="px-3.5 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold transition-colors cursor-pointer">
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Phase Presets -->
+          <div class="flex flex-wrap gap-1.5 justify-center">
+            <button type="button" onclick="setClassTimerMinutes(80, 'Full 2 JP Session (80 Mins)')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-skyquest-100 text-slate-600 hover:text-skyquest-800 text-[11px] font-bold transition-colors cursor-pointer">80m</button>
+            <button type="button" onclick="setClassTimerMinutes(10, 'Phase 1: Warm-Up (10 Mins)')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-skyquest-100 text-slate-600 hover:text-skyquest-800 text-[11px] font-bold transition-colors cursor-pointer">10m</button>
+            <button type="button" onclick="setClassTimerMinutes(15, 'Phase 2: Core Notes (15 Mins)')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-skyquest-100 text-slate-600 hover:text-skyquest-800 text-[11px] font-bold transition-colors cursor-pointer">15m</button>
+            <button type="button" onclick="setClassTimerMinutes(20, 'Phase 3: Examples (20 Mins)')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-skyquest-100 text-slate-600 hover:text-skyquest-800 text-[11px] font-bold transition-colors cursor-pointer">20m</button>
+            <button type="button" onclick="setClassTimerMinutes(30, 'Phase 4: Challenge Arena (30 Mins)')" class="px-2.5 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-800 text-[11px] font-extrabold transition-colors cursor-pointer">30m Arena</button>
+          </div>
+        </div>
+
+        <!-- Widget 4: Interactive 5-Step Lesson Flow Checklist -->
+        <div class="bg-white rounded-3xl p-5 shadow-card border border-slate-100">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-extrabold text-slate-800 text-sm">5-Step Lesson Flow</h3>
+            <span id="checklist-progress-label" class="text-[11px] font-bold text-slate-400">0/5 Done</span>
+          </div>
+
+          <div class="space-y-2 text-xs" id="lesson-flow-checklist">
+            <label class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
+              <input type="checkbox" onchange="updateChecklistCount()" class="lesson-flow-cb w-4 h-4 rounded accent-skyquest-600">
+              <span class="font-semibold text-slate-700 flex-1">1. Warm-Up &amp; Apperception</span>
+              <span class="text-[10px] font-bold text-slate-400">10m</span>
+            </label>
+
+            <label class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
+              <input type="checkbox" onchange="updateChecklistCount()" class="lesson-flow-cb w-4 h-4 rounded accent-skyquest-600">
+              <span class="font-semibold text-slate-700 flex-1">2. Copy 3-Step Core Notes</span>
+              <span class="text-[10px] font-bold text-slate-400">15m</span>
+            </label>
+
+            <label class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
+              <input type="checkbox" onchange="updateChecklistCount()" class="lesson-flow-cb w-4 h-4 rounded accent-skyquest-600">
+              <span class="font-semibold text-slate-700 flex-1">3. Guided Examples Reveal</span>
+              <span class="text-[10px] font-bold text-slate-400">20m</span>
+            </label>
+
+            <label class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
+              <input type="checkbox" onchange="updateChecklistCount()" class="lesson-flow-cb w-4 h-4 rounded accent-skyquest-600">
+              <span class="font-semibold text-slate-700 flex-1">4. 70:30 Challenge Arena</span>
+              <span class="text-[10px] font-bold text-amber-600">30m</span>
+            </label>
+
+            <label class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
+              <input type="checkbox" onchange="updateChecklistCount()" class="lesson-flow-cb w-4 h-4 rounded accent-skyquest-600">
+              <span class="font-semibold text-slate-700 flex-1">5. Tuesday PLSV Bridge</span>
+              <span class="text-[10px] font-bold text-slate-400">5m</span>
+            </label>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MOBILE FIXED BOTTOM NAVIGATION BAR (< 1024px)
+       ===================================================================== -->
+  <nav class="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-1.5 py-1.5 flex items-center justify-around shadow-lg" aria-label="Mobile Navigation">
+    <button type="button" onclick="switchTab('home')" data-mobile-tab="home" class="mobile-nav-btn flex flex-col items-center justify-center py-1.5 px-2.5 rounded-xl text-skyquest-600 bg-skyquest-50 transition-all">
+      <span class="text-base leading-none">🏠</span>
+      <span class="text-[10px] font-extrabold mt-1">Home</span>
+    </button>
+
+    <button type="button" onclick="switchTab('notes')" data-mobile-tab="notes" class="mobile-nav-btn flex flex-col items-center justify-center py-1.5 px-2.5 rounded-xl text-slate-500 transition-all">
+      <span class="text-base leading-none">📖</span>
+      <span class="text-[10px] font-bold mt-1">Notes</span>
+    </button>
+
+    <button type="button" onclick="switchTab('examples')" data-mobile-tab="examples" class="mobile-nav-btn flex flex-col items-center justify-center py-1.5 px-2.5 rounded-xl text-slate-500 transition-all">
+      <span class="text-base leading-none">💡</span>
+      <span class="text-[10px] font-bold mt-1">Examples</span>
+    </button>
+
+    <button type="button" onclick="switchTab('challenge')" data-mobile-tab="challenge" class="mobile-nav-btn flex flex-col items-center justify-center py-1.5 px-2.5 rounded-xl text-slate-500 transition-all">
+      <span class="text-base leading-none">🏆</span>
+      <span class="text-[10px] font-bold mt-1">Challenge</span>
+    </button>
+
+    <button type="button" onclick="switchTab('tools')" data-mobile-tab="tools" class="mobile-nav-btn flex flex-col items-center justify-center py-1.5 px-2.5 rounded-xl text-slate-500 transition-all">
+      <span class="text-base leading-none">⏱️</span>
+      <span class="text-[10px] font-bold mt-1">Tools/Timer</span>
+    </button>
+  </nav>
+
+  <!-- =====================================================================
+       JAVASCRIPT LOGIC (Self-Contained, Zero External Audio/Image URLs)
+       ===================================================================== -->
+  <script>
+    // ---------------------------------------------------------------------
+    // 1. APPLICATION STATE
+    // ---------------------------------------------------------------------
+    const state = {
+      activeTab: 'home',
+      teacherMode: false,
+      projectorMode: false,
+      soundEnabled: true,
+      gems: 0,
+      solvedQuests: new Set(),
+      challengeFilter: 'all',
+      activeExampleId: 1,
+      exampleStepsRevealed: {
+        1: 0,
+        2: 0
+      },
+      // 80-Minute (2 JP) Timer State
+      timerTotalSeconds: 80 * 60,
+      timerRemainingSeconds: 80 * 60,
+      timerRunning: false,
+      timerIntervalId: null
+    };
+
+    // ---------------------------------------------------------------------
+    // 2. CURRICULUM DATA: GUIDED EXAMPLES (STEP-BY-STEP REVEAL)
+    // ---------------------------------------------------------------------
+    const guidedExamples = {
+      1: {
+        title: "Example 1 — Addition Case (Budi's Pencil Boxes)",
+        badge: "Addition (+)",
+        badgeStyle: "bg-skyquest-100 text-skyquest-800",
+        story: `Budi buys <strong>3 full pencil boxes</strong> and <strong>2 loose pencils</strong> at SMP Almazaya's school cooperative. If each box contains <strong>12 pencils</strong> (<span class="math-expr font-bold text-skyquest-700">x = 12</span>), how many pencils does Budi have in total?`,
+        steps: [
+          {
+            stepNum: 1,
+            heading: "Step 1 — Identify the Unknown (Identifikasi Variabel)",
+            body: `Let <span class="math-expr font-extrabold text-skyquest-700 bg-skyquest-50 px-2 py-0.5 rounded">x</span> = number of pencils in 1 full box (jumlah pensil dalam 1 kotak).`
+          },
+          {
+            stepNum: 2,
+            heading: "Step 2 — Model Algebraic Expression (Susun Bentuk Aljabar)",
+            body: `3 boxes of pencils + 2 loose pencils &rarr; <span class="math-expr font-extrabold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg text-base">3x + 2</span>`
+          },
+          {
+            stepNum: 3,
+            heading: "Step 3 — Substitute & Calculate (Substitusi x = 12)",
+            body: `
+              <div class="math-expr text-sm sm:text-base space-y-1 text-slate-800">
+                <div>Total pencils = 3x + 2</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 3(<span class="text-emerald-600 font-extrabold">12</span>) + 2</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 36 + 2 = <span class="bg-emerald-100 text-emerald-900 font-extrabold px-2.5 py-0.5 rounded-lg">38 pencils</span></div>
+              </div>
+            `
+          }
+        ]
+      },
+      2: {
+        title: "Example 2 — Subtraction Case (Siti's Candies)",
+        badge: "Subtraction (−)",
+        badgeStyle: "bg-rose-100 text-rose-800",
+        story: `Siti buys <strong>4 packs of candies</strong> to share with her classmates in Grade 7.4. Before sharing, Siti eats <strong>3 candies</strong>. If each pack contains <strong>10 candies</strong> (<span class="math-expr font-bold text-rose-700">p = 10</span>), how many candies are left?`,
+        steps: [
+          {
+            stepNum: 1,
+            heading: "Step 1 — Identify the Unknown (Identifikasi Variabel)",
+            body: `Let <span class="math-expr font-extrabold text-skyquest-700 bg-skyquest-50 px-2 py-0.5 rounded">p</span> = number of candies in 1 pack (isi permen dalam 1 bungkus).`
+          },
+          {
+            stepNum: 2,
+            heading: "Step 2 — Model Algebraic Expression (Susun Bentuk Aljabar)",
+            body: `4 packs of candies minus 3 eaten candies &rarr; <span class="math-expr font-extrabold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg text-base">4p − 3</span>`
+          },
+          {
+            stepNum: 3,
+            heading: "Step 3 — Substitute & Calculate (Substitusi p = 10)",
+            body: `
+              <div class="math-expr text-sm sm:text-base space-y-1 text-slate-800">
+                <div>Candies left = 4p − 3</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 4(<span class="text-emerald-600 font-extrabold">10</span>) − 3</div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 40 − 3 = <span class="bg-emerald-100 text-emerald-900 font-extrabold px-2.5 py-0.5 rounded-lg">37 candies</span></div>
+              </div>
+            `
+          }
+        ]
+      }
+    };
+
+    // ---------------------------------------------------------------------
+    // 3. CURRICULUM DATA: 5 INTERACTIVE 70:30 CHALLENGES
+    // ---------------------------------------------------------------------
+    const challengesData = [
+      {
+        id: 1,
+        category: "core",
+        tierLabel: "Core 70% • Quest 1",
+        tierStyle: "bg-skyquest-100 text-skyquest-800",
+        title: "Spidol Kelas 7.4 (Class Markers)",
+        icon: "🖊️",
+        variableHint: "Use variable x",
+        story: `Alya, sekretaris kelas 7.4, buys <strong>3 boxes of whiteboard markers</strong> and <strong>4 loose markers</strong>. If 1 box contains <strong>12 markers</strong> (<span class="math-expr font-bold text-skyquest-700">x = 12</span>), find the algebraic expression and the total number of markers!`,
+        hint: `<strong>Step 1:</strong> Let <span class="math-expr font-bold">x</span> = markers per box.<br><strong>Step 2:</strong> 3 boxes + 4 loose markers &rarr; <span class="math-expr font-bold">3x + 4</span>.<br><strong>Step 3:</strong> Replace <span class="math-expr font-bold">x</span> with <span class="math-expr font-bold">12</span>, multiply by 3, then add 4.`,
+        placeholderExpr: "e.g., 3x + 4",
+        placeholderVal: "e.g., 40",
+        acceptedExprs: ["3x+4", "4+3x"],
+        expectedValue: 40,
+        unitText: "markers / spidol",
+        answerKey: {
+          step1: "x = jumlah spidol dalam 1 kotak",
+          step2: "3x + 4",
+          step3: "3(12) + 4 = 36 + 4 = 40 markers"
+        }
+      },
+      {
+        id: 2,
+        category: "core",
+        tierLabel: "Core 70% • Quest 2",
+        tierStyle: "bg-skyquest-100 text-skyquest-800",
+        title: "Mobile Legends Diamonds",
+        icon: "💎",
+        variableHint: "Use variable d",
+        story: `Reno buys <strong>4 Diamond bundles</strong> in Mobile Legends and receives <strong>50 bonus diamonds</strong> from an event. If 1 bundle contains <strong>55 diamonds</strong> (<span class="math-expr font-bold text-skyquest-700">d = 55</span>), what is the algebraic expression and Reno's total diamonds?`,
+        hint: `<strong>Step 1:</strong> Let <span class="math-expr font-bold">d</span> = diamonds in 1 bundle.<br><strong>Step 2:</strong> 4 bundles + 50 bonus &rarr; <span class="math-expr font-bold">4d + 50</span>.<br><strong>Step 3:</strong> Calculate <span class="math-expr font-bold">4(55) + 50</span>.`,
+        placeholderExpr: "e.g., 4d + 50",
+        placeholderVal: "e.g., 270",
+        acceptedExprs: ["4d+50", "50+4d"],
+        expectedValue: 270,
+        unitText: "diamonds",
+        answerKey: {
+          step1: "d = isi Diamond dalam 1 bundle",
+          step2: "4d + 50",
+          step3: "4(55) + 50 = 220 + 50 = 270 diamonds"
+        }
+      },
+      {
+        id: 3,
+        category: "core",
+        tierLabel: "Core 70% • Quest 3",
+        tierStyle: "bg-skyquest-100 text-skyquest-800",
+        title: "Kue Bingka Banjar",
+        icon: "🥮",
+        variableHint: "Use variable y",
+        story: `Panitia acara sekolah prepares <strong>5 boxes of Kue Bingka Banjar</strong> plus <strong>3 extra slices</strong> on a separate plate. If 1 box is sliced into <strong>8 pieces</strong> (<span class="math-expr font-bold text-skyquest-700">y = 8</span>), write the expression and total slices of Kue Bingka!`,
+        hint: `<strong>Step 1:</strong> Let <span class="math-expr font-bold">y</span> = slices per box.<br><strong>Step 2:</strong> 5 boxes + 3 extra slices &rarr; <span class="math-expr font-bold">5y + 3</span>.<br><strong>Step 3:</strong> Substitute <span class="math-expr font-bold">y = 8</span> into <span class="math-expr font-bold">5y + 3</span>.`,
+        placeholderExpr: "e.g., 5y + 3",
+        placeholderVal: "e.g., 43",
+        acceptedExprs: ["5y+3", "3+5y"],
+        expectedValue: 43,
+        unitText: "slices / potong",
+        answerKey: {
+          step1: "y = potongan kue dalam 1 kotak",
+          step2: "5y + 3",
+          step3: "5(8) + 3 = 40 + 3 = 43 slices"
+        }
+      },
+      {
+        id: 4,
+        category: "levelup",
+        tierLabel: "Level Up 30% • Like Terms (Suku Sejenis)",
+        tierStyle: "bg-amber-100 text-amber-800",
+        title: "OSIS Snack Boxes (Combine Like Terms!)",
+        icon: "🍱",
+        variableHint: "Use variable x (Simplified!)",
+        story: `OSIS orders <strong>(3x + 5)</strong> snack boxes on Monday, adds <strong>2x</strong> more boxes on Tuesday, and <strong>2 cakes</strong> are eaten before the event starts. Simplify the algebraic expression first, then find the total cakes if <span class="math-expr font-bold text-amber-700">x = 10</span>!`,
+        hint: `<strong>Step 1:</strong> Let <span class="math-expr font-bold">x</span> = cakes per box.<br><strong>Step 2 (Combine Like Terms):</strong> Group <span class="math-expr font-bold">(3x + 2x) + (5 − 2)</span> &rarr; <span class="math-expr font-bold">5x + 3</span>.<br><strong>Step 3:</strong> Substitute <span class="math-expr font-bold">x = 10</span> into <span class="math-expr font-bold">5x + 3</span>.`,
+        placeholderExpr: "Simplified: e.g., 5x + 3",
+        placeholderVal: "e.g., 53",
+        acceptedExprs: ["5x+3", "3+5x"],
+        unsimplifiedExprs: ["3x+5+2x-2", "(3x+5)+2x-2", "3x+2x+5-2"],
+        expectedValue: 53,
+        unitText: "cakes / kue",
+        answerKey: {
+          step1: "x = banyak kue dalam 1 kotak",
+          step2: "(3x + 5) + 2x − 2 = 5x + 3",
+          step3: "5(10) + 3 = 50 + 3 = 53 cakes"
+        }
+      },
+      {
+        id: 5,
+        category: "levelup",
+        tierLabel: "Level Up 30% • Distributive (Sifat Distributif)",
+        tierStyle: "bg-amber-100 text-amber-800",
+        title: "Study Group Stationery (Expand Brackets!)",
+        icon: "✏️",
+        variableHint: "Use variable y (Expanded!)",
+        story: `There are <strong>3 study groups</strong> in Grade 7.4. Each group brings <strong>(2y + 4)</strong> stationery items. Expand using the <strong>Distributive Property</strong> (<span class="math-expr font-bold">3(2y + 4)</span>), then find the total items if 1 pack contains <span class="math-expr font-bold text-amber-700">y = 6</span> pens!`,
+        hint: `<strong>Step 1:</strong> Let <span class="math-expr font-bold">y</span> = pens in 1 pack.<br><strong>Step 2 (Distributive Property):</strong> Multiply 3 into both terms: <span class="math-expr font-bold">3 × 2y + 3 × 4 = 6y + 12</span>.<br><strong>Step 3:</strong> Substitute <span class="math-expr font-bold">y = 6</span> into <span class="math-expr font-bold">6y + 12</span>.`,
+        placeholderExpr: "Expanded: e.g., 6y + 12",
+        placeholderVal: "e.g., 48",
+        acceptedExprs: ["6y+12", "12+6y"],
+        unsimplifiedExprs: ["3(2y+4)", "3*(2y+4)"],
+        expectedValue: 48,
+        unitText: "items / alat tulis",
+        answerKey: {
+          step1: "y = isi pulpen dalam 1 bungkus",
+          step2: "3(2y + 4) = 6y + 12",
+          step3: "6(6) + 12 = 36 + 12 = 48 items"
+        }
+      }
+    ];
+
+    // ---------------------------------------------------------------------
+    // 4. WEB AUDIO API SOUND SYNTHESIZER (Zero External Sound URLs)
+    // ---------------------------------------------------------------------
+    function playChime(type = 'success') {
+      if (!state.soundEnabled) return;
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'success') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, now);       // C5
+          osc.frequency.setValueAtTime(659.25, now + 0.09); // E5
+          osc.frequency.setValueAtTime(783.99, now + 0.18); // G5
+          gain.gain.setValueAtTime(0.14, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
+          osc.start(now);
+          osc.stop(now + 0.43);
+        } else if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600, now);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.09);
+        } else {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(280, now);
+          osc.frequency.setValueAtTime(230, now + 0.1);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.26);
+        }
+      } catch (e) {
+        // Ignore audio errors if blocked by browser autoplay policy
+      }
+    }
+
+    function toggleSound() {
+      state.soundEnabled = !state.soundEnabled;
+      const desktopBtn = document.getElementById('sound-toggle-desktop');
+      if (desktopBtn) desktopBtn.textContent = state.soundEnabled ? '🔊' : '🔇';
+      showToast(state.soundEnabled ? '🔊 Sound effects ON' : '🔇 Sound effects MUTED', 'info');
+    }
+
+    // ---------------------------------------------------------------------
+    // 5. TOAST NOTIFICATION SYSTEM (Replaces alert())
+    // ---------------------------------------------------------------------
+    function showToast(message, variant = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+
+      const styles = {
+        success: 'bg-emerald-600 text-white border-emerald-500',
+        warning: 'bg-amber-500 text-slate-950 border-amber-400',
+        info: 'bg-slate-800 text-white border-slate-700'
+      };
+
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto px-4 py-3 rounded-2xl shadow-lg border text-xs sm:text-sm font-bold animate-pop ${styles[variant] || styles.info}`;
+      toast.innerHTML = message;
+
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-6px)';
+        toast.style.transition = 'all 0.25s ease';
+        setTimeout(() => toast.remove(), 260);
+      }, 2800);
+    }
+
+    // ---------------------------------------------------------------------
+    // 6. TAB NAVIGATION & RESPONSIVE VIEW HANDLER
+    // ---------------------------------------------------------------------
+    function switchTab(tabName) {
+      state.activeTab = tabName;
+      playChime('click');
+
+      const isDesktop = window.innerWidth >= 1024;
+      const rightPanel = document.getElementById('right-widget-panel');
+      const allTabPanels = document.querySelectorAll('.tab-panel');
+
+      if (tabName === 'tools' && !isDesktop) {
+        // On Mobile, 'Tools/Timer' shows the right widget panel as the main view
+        allTabPanels.forEach(panel => {
+          panel.classList.add('hidden');
+          panel.classList.remove('tab-panel-active');
+        });
+        rightPanel.classList.remove('hidden');
+        rightPanel.classList.add('tab-panel-active');
+      } else {
+        // Standard tab switch
+        const targetTab = (tabName === 'tools') ? 'home' : tabName;
+        state.activeTab = targetTab;
+
+        allTabPanels.forEach(panel => {
+          if (panel.id === `tab-${targetTab}`) {
+            panel.classList.remove('hidden');
+            panel.classList.add('tab-panel-active');
+          } else {
+            panel.classList.add('hidden');
+            panel.classList.remove('tab-panel-active');
+          }
+        });
+
+        // Keep right widget panel visible on desktop, hidden on mobile unless 'tools' is active
+        if (isDesktop) {
+          rightPanel.classList.remove('hidden');
+        } else {
+          rightPanel.classList.add('hidden');
+        }
+      }
+
+      // Update Desktop Sidebar Active Styles
+      document.querySelectorAll('.sidebar-tab-btn').forEach(btn => {
+        const btnTab = btn.getAttribute('data-tab-btn');
+        if (btnTab === state.activeTab) {
+          btn.classList.remove('text-slate-600', 'hover:bg-slate-50', 'font-semibold');
+          btn.classList.add('bg-skyquest-50', 'text-skyquest-700', 'font-bold');
+        } else {
+          btn.classList.add('text-slate-600', 'hover:bg-slate-50', 'font-semibold');
+          btn.classList.remove('bg-skyquest-50', 'text-skyquest-700', 'font-bold');
+        }
+      });
+
+      // Update Mobile Bottom Nav Active Styles
+      document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+        const mTab = btn.getAttribute('data-mobile-tab');
+        if (mTab === tabName) {
+          btn.classList.remove('text-slate-500');
+          btn.classList.add('text-skyquest-600', 'bg-skyquest-50');
+        } else {
+          btn.classList.add('text-slate-500');
+          btn.classList.remove('text-skyquest-600', 'bg-skyquest-50');
+        }
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Handle viewport resize cleanly between Mobile (<1024px) and 16:9 Desktop
+    window.addEventListener('resize', () => {
+      const isDesktop = window.innerWidth >= 1024;
+      const rightPanel = document.getElementById('right-widget-panel');
+      if (isDesktop) {
+        rightPanel.classList.remove('hidden');
+        if (state.activeTab === 'tools') {
+          switchTab('home');
+        }
+      } else if (state.activeTab !== 'tools') {
+        rightPanel.classList.add('hidden');
+      }
+    });
+
+    // ---------------------------------------------------------------------
+    // 7. 16:9 PROJECTOR FOCUS MODE & MR. TAQWA'S TEACHER MODE
+    // ---------------------------------------------------------------------
+    function toggleProjectorMode() {
+      state.projectorMode = !state.projectorMode;
+      const htmlEl = document.documentElement;
+      const btn = document.getElementById('projector-mode-btn');
+      const label = document.getElementById('projector-btn-label');
+
+      if (state.projectorMode) {
+        htmlEl.classList.add('projector-mode');
+        btn.classList.remove('bg-slate-100', 'text-slate-700');
+        btn.classList.add('bg-skyquest-600', 'text-white', 'border-skyquest-600');
+        if (label) label.textContent = '16:9 Focus: ON';
+        showToast('🖥️ 16:9 Projector Focus Mode ON — Larger classroom typography!', 'info');
+      } else {
+        htmlEl.classList.remove('projector-mode');
+        btn.classList.add('bg-slate-100', 'text-slate-700');
+        btn.classList.remove('bg-skyquest-600', 'text-white', 'border-skyquest-600');
+        if (label) label.textContent = '16:9 Projector Focus';
+        showToast('🖥️ Standard view restored', 'info');
+      }
+    }
+
+    function toggleTeacherMode(forceValue) {
+      if (typeof forceValue === 'boolean') {
+        state.teacherMode = forceValue;
+      } else {
+        state.teacherMode = !state.teacherMode;
+      }
+
+      // Sync desktop checkbox & mobile quick button
+      const desktopCb = document.getElementById('teacher-mode-checkbox');
+      if (desktopCb) desktopCb.checked = state.teacherMode;
+
+      const mobileBtn = document.getElementById('mobile-teacher-toggle-btn');
+      if (mobileBtn) {
+        if (state.teacherMode) {
+          mobileBtn.textContent = '👨‍🏫 Key: ON';
+          mobileBtn.classList.remove('bg-slate-100', 'text-slate-700', 'border-slate-200');
+          mobileBtn.classList.add('bg-skyquest-600', 'text-white', 'border-skyquest-600');
+        } else {
+          mobileBtn.textContent = '👨‍🏫 Key: OFF';
+          mobileBtn.classList.add('bg-slate-100', 'text-slate-700', 'border-slate-200');
+          mobileBtn.classList.remove('bg-skyquest-600', 'text-white', 'border-skyquest-600');
+        }
+      }
+
+      // Toggle visibility of Mr. Taqwa's Answer Keys across all 5 Challenge cards
+      document.querySelectorAll('.teacher-answer-key-box').forEach(box => {
+        if (state.teacherMode) {
+          box.classList.remove('hidden');
+        } else {
+          box.classList.add('hidden');
+        }
+      });
+
+      showToast(
+        state.teacherMode
+          ? "👨‍🏫 Mr. Taqwa's Teacher Mode ON — Answer keys visible!"
+          : "🔒 Teacher Mode OFF — Answer keys hidden.",
+        state.teacherMode ? 'success' : 'info'
+      );
+    }
+
+    // ---------------------------------------------------------------------
+    // 8. COPY BOARD NOTES (Iframe-Safe document.execCommand('copy'))
+    // ---------------------------------------------------------------------
+    function copyBoardNotes() {
+      const notesText = [
+        "SMP ALMAZAYA ISLAMIC SCHOOL — GRADE 7.4 (MR. TAQWA)",
+        "Topic: Solving Algebraic Word Problems (3-Step Method)",
+        "------------------------------------------------------",
+        "Step 1 — Identify the Unknown (Identifikasi Variabel):",
+        "Represent unknown quantities with a variable (x, y, p, d, m).",
+        "",
+        "Step 2 — Model & Simplify (Susun & Sederhanakan Bentuk Aljabar):",
+        "Convert story keywords into math operations (+, -, multiplication), and simplify using Like Terms or Distributive Property when needed.",
+        "",
+        "Step 3 — Substitute & Calculate (Substitusi & Hitung):",
+        "Replace the variable with the given number and compute the final answer."
+      ].join("\n");
+
+      const textarea = document.createElement('textarea');
+      textarea.value = notesText;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+
+      try {
+        document.execCommand('copy');
+        playChime('success');
+        showToast('📋 Board notes copied to clipboard!', 'success');
+      } catch (err) {
+        showToast('Could not copy notes automatically.', 'warning');
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
+
+    // ---------------------------------------------------------------------
+    // 9. GUIDED EXAMPLES RENDERER & STEP-BY-STEP REVEAL
+    // ---------------------------------------------------------------------
+    function selectExample(exampleId) {
+      state.activeExampleId = exampleId;
+      playChime('click');
+
+      [1, 2].forEach(id => {
+        const btn = document.getElementById(`example-switch-${id}`);
+        if (!btn) return;
+        if (id === exampleId) {
+          btn.classList.remove('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200', 'font-bold');
+          btn.classList.add('bg-skyquest-600', 'text-white', 'shadow-xs', 'font-extrabold');
+        } else {
+          btn.classList.add('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200', 'font-bold');
+          btn.classList.remove('bg-skyquest-600', 'text-white', 'shadow-xs', 'font-extrabold');
+        }
+      });
+
+      renderGuidedExample();
+    }
+
+    function revealExampleStep(stepNumber) {
+      const exId = state.activeExampleId;
+      if (state.exampleStepsRevealed[exId] < stepNumber) {
+        state.exampleStepsRevealed[exId] = stepNumber;
+      }
+      playChime('success');
+      renderGuidedExample();
+    }
+
+    function resetExampleSteps() {
+      state.exampleStepsRevealed[state.activeExampleId] = 0;
+      playChime('click');
+      renderGuidedExample();
+    }
+
+    function renderGuidedExample() {
+      const exId = state.activeExampleId;
+      const ex = guidedExamples[exId];
+      const revealedCount = state.exampleStepsRevealed[exId];
+      const container = document.getElementById('example-display-box');
+      if (!container || !ex) return;
+
+      const stepsHtml = ex.steps.map(step => {
+        const isShown = revealedCount >= step.stepNum;
+        if (!isShown) {
+          return `
+            <div class="p-4 rounded-2xl border-2 border-dashed border-slate-200 bg-white/60 flex items-center justify-between gap-3">
+              <span class="text-xs sm:text-sm font-bold text-slate-400">🔒 ${step.heading}</span>
+              <button type="button" onclick="revealExampleStep(${step.stepNum})" class="px-3.5 py-1.5 rounded-xl bg-skyquest-600 hover:bg-skyquest-700 text-white text-xs font-extrabold transition-colors cursor-pointer shrink-0">
+                Reveal Step ${step.stepNum}
+              </button>
+            </div>
+          `;
+        }
+        return `
+          <div class="p-4 rounded-2xl bg-white border border-skyquest-200 shadow-2xs animate-pop">
+            <p class="text-xs font-extrabold uppercase tracking-wider text-skyquest-600 mb-1">${step.heading}</p>
+            <div class="text-sm sm:text-base text-slate-700 leading-relaxed">${step.body}</div>
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <h3 class="font-extrabold text-slate-800 text-base sm:text-lg">${ex.title}</h3>
+          <span class="px-3 py-1 rounded-full text-xs font-extrabold ${ex.badgeStyle}">${ex.badge}</span>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-white border border-slate-200/80 text-sm sm:text-base text-slate-700 leading-relaxed mb-4">
+          ${ex.story}
+        </div>
+
+        <!-- Step Controls Bar -->
+        <div class="flex flex-wrap items-center gap-2 mb-4">
+          <button type="button" onclick="revealExampleStep(1)" class="px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${revealedCount >= 1 ? 'bg-emerald-100 text-emerald-800' : 'bg-skyquest-600 hover:bg-skyquest-700 text-white'}">
+            ${revealedCount >= 1 ? '✓ Step 1 Revealed' : 'Reveal Step 1'}
+          </button>
+          <button type="button" onclick="revealExampleStep(2)" class="px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${revealedCount >= 2 ? 'bg-emerald-100 text-emerald-800' : 'bg-skyquest-600 hover:bg-skyquest-700 text-white'}">
+            ${revealedCount >= 2 ? '✓ Step 2 Revealed' : 'Reveal Step 2'}
+          </button>
+          <button type="button" onclick="revealExampleStep(3)" class="px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${revealedCount >= 3 ? 'bg-emerald-100 text-emerald-800' : 'bg-skyquest-600 hover:bg-skyquest-700 text-white'}">
+            ${revealedCount >= 3 ? '✓ Step 3 Revealed' : 'Reveal Step 3'}
+          </button>
+          <button type="button" onclick="resetExampleSteps()" class="ml-auto px-3.5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold transition-all cursor-pointer">
+            Reset Steps
+          </button>
+        </div>
+
+        <div class="space-y-3">
+          ${stepsHtml}
+        </div>
+      `;
+    }
+
+    // ---------------------------------------------------------------------
+    // 10. CHALLENGE ARENA RENDERING & SMART VALIDATION
+    // ---------------------------------------------------------------------
+    function filterChallenges(category) {
+      state.challengeFilter = category;
+      document.querySelectorAll('.challenge-filter-btn').forEach(btn => {
+        if (btn.getAttribute('data-filter-btn') === category) {
+          btn.classList.remove('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200', 'font-bold');
+          btn.classList.add('bg-skyquest-600', 'text-white', 'font-extrabold');
+        } else {
+          btn.classList.add('bg-slate-100', 'text-slate-600', 'hover:bg-slate-200', 'font-bold');
+          btn.classList.remove('bg-skyquest-600', 'text-white', 'font-extrabold');
+        }
+      });
+      renderChallengeCards();
+    }
+
+    function toggleChallengeHint(id) {
+      const hintBox = document.getElementById(`challenge-hint-${id}`);
+      if (hintBox) {
+        hintBox.classList.toggle('hidden');
+        playChime('click');
+      }
+    }
+
+    // Normalize student algebraic expressions (case-insensitive, whitespace-free, unicode minus)
+    function normalizeExpression(raw) {
+      return (raw || '')
+        .toLowerCase()
+        .replace(/\s+/g, '')
+        .replace(/−/g, '-')
+        .replace(/×/g, '*');
+    }
+
+    function checkChallengeAnswer(id) {
+      const quest = challengesData.find(q => q.id === id);
+      if (!quest) return;
+
+      const exprInput = document.getElementById(`quest-expr-${id}`);
+      const valInput = document.getElementById(`quest-val-${id}`);
+      const feedbackBox = document.getElementById(`quest-feedback-${id}`);
+
+      const rawExpr = exprInput ? exprInput.value : '';
+      const rawVal = valInput ? valInput.value : '';
+
+      const cleanExpr = normalizeExpression(rawExpr);
+      const numericVal = parseFloat((rawVal || '').replace(/[^0-9.-]/g, ''));
+
+      const isExprCorrect = quest.acceptedExprs.includes(cleanExpr);
+      const isUnsimplified = (quest.unsimplifiedExprs || []).includes(cleanExpr);
+      const isValCorrect = !isNaN(numericVal) && numericVal === quest.expectedValue;
+
+      feedbackBox.classList.remove('hidden');
+
+      if (isExprCorrect && isValCorrect) {
+        feedbackBox.className = 'mt-4 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs sm:text-sm font-bold animate-pop';
+        feedbackBox.innerHTML = `🎉 <strong>MashaAllah, Spot On!</strong> Expression <span class="math-expr bg-white px-1.5 py-0.5 rounded border border-emerald-200">${quest.answerKey.step2}</span> and value <strong>${quest.expectedValue} ${quest.unitText}</strong> are both correct!`;
+
+        if (!state.solvedQuests.has(id)) {
+          state.solvedQuests.add(id);
+          state.gems += 50;
+          playChime('success');
+          updateAllProgressUI();
+          renderChallengeCards();
+          showToast(`💎 +50 Gems earned for solving Quest ${id}!`, 'success');
+        } else {
+          playChime('success');
+        }
+      } else {
+        playChime('error');
+        let tips = [];
+        if (isUnsimplified) {
+          tips.push(`Your Step 2 expression is close, but please <strong>simplify it</strong> first (e.g., combine like terms or expand brackets)!`);
+        } else if (!isExprCorrect) {
+          tips.push(`Check <strong>Step 2 (Algebraic Expression)</strong> — make sure you use the right variable (${quest.variableHint}) and operation.`);
+        }
+        if (!isValCorrect) {
+          tips.push(`Check <strong>Step 3 (Final Value)</strong> — substitute the given number carefully and recalculate.`);
+        }
+
+        feedbackBox.className = 'mt-4 p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 text-xs sm:text-sm font-semibold animate-pop';
+        feedbackBox.innerHTML = `🤔 <strong>Almost there! Ask your seatmate or raise your hand for Mr. Taqwa:</strong><ul class="list-disc pl-5 mt-1 space-y-0.5">${tips.map(t => `<li>${t}</li>`).join('')}</ul>`;
+      }
+    }
+
+    function renderChallengeCards() {
+      const container = document.getElementById('challenge-cards-container');
+      if (!container) return;
+
+      const filtered = challengesData.filter(q => {
+        if (state.challengeFilter === 'all') return true;
+        return q.category === state.challengeFilter;
+      });
+
+      container.innerHTML = filtered.map(quest => {
+        const isSolved = state.solvedQuests.has(quest.id);
+        return `
+          <article class="bg-white rounded-3xl p-5 sm:p-6 shadow-card border-2 transition-all ${isSolved ? 'border-emerald-300 bg-emerald-50/15' : 'border-slate-100'}">
+            <!-- Top Metadata Row -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-2xl ${isSolved ? 'bg-emerald-600 text-white' : 'bg-skyquest-100 text-skyquest-700'} font-extrabold flex items-center justify-center text-lg shrink-0">
+                  ${isSolved ? '✓' : quest.icon}
+                </div>
+                <div>
+                  <span class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-extrabold ${quest.tierStyle}">
+                    ${quest.tierLabel}
+                  </span>
+                  <h3 class="font-extrabold text-slate-800 text-base sm:text-lg mt-0.5">${quest.title}</h3>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-xl text-xs font-extrabold ${isSolved ? 'bg-emerald-100 text-emerald-800' : 'bg-sky-50 text-skyquest-700 border border-sky-100'}">
+                  ${isSolved ? '✅ +50 💎 Earned' : '+50 💎'}
+                </span>
+                <button type="button" onclick="toggleChallengeHint(${quest.id})" class="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200/80 text-xs font-bold transition-colors cursor-pointer">
+                  💡 Need a Hint? / Minta Petunjuk
+                </button>
+              </div>
+            </div>
+
+            <!-- Story Text -->
+            <p class="text-sm sm:text-base text-slate-700 leading-relaxed bg-slate-50/90 p-4 rounded-2xl border border-slate-100">
+              ${quest.story}
+            </p>
+
+            <!-- Toggleable Hint Box -->
+            <div id="challenge-hint-${quest.id}" class="hidden mt-3 p-3.5 rounded-2xl bg-amber-50/90 border border-amber-200 text-xs sm:text-sm text-amber-950 leading-relaxed animate-pop">
+              💡 <strong>Hint / Petunjuk:</strong><br>${quest.hint}
+            </div>
+
+            <!-- Interactive Student Inputs (Step 2 & Step 3) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mt-4">
+              <div>
+                <label for="quest-expr-${quest.id}" class="block text-xs font-extrabold text-slate-700 mb-1">
+                  Step 2: Algebraic Expression <span class="text-skyquest-600">(${quest.variableHint})</span>
+                </label>
+                <input type="text" id="quest-expr-${quest.id}" value="${isSolved ? quest.answerKey.step2 : ''}" placeholder="${quest.placeholderExpr}"
+                       class="math-expr w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 bg-white text-slate-800 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-skyquest-500">
+              </div>
+
+              <div>
+                <label for="quest-val-${quest.id}" class="block text-xs font-extrabold text-slate-700 mb-1">
+                  Step 3: Final Value <span class="text-slate-400">(${quest.unitText})</span>
+                </label>
+                <input type="text" inputmode="numeric" id="quest-val-${quest.id}" value="${isSolved ? quest.expectedValue : ''}" placeholder="${quest.placeholderVal}"
+                       class="math-expr w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 bg-white text-slate-800 font-bold text-sm focus:outline-none focus:ring-2 focus:ring-skyquest-500">
+              </div>
+            </div>
+
+            <!-- Action Row -->
+            <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+              <span class="text-[11px] font-semibold text-slate-400">
+                Stuck? Raise your hand &amp; ask Mr. Taqwa! 🙋‍♂️
+              </span>
+              <button type="button" onclick="checkChallengeAnswer(${quest.id})" class="px-5 py-2.5 rounded-2xl ${isSolved ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-skyquest-600 hover:bg-skyquest-700'} text-white font-extrabold text-xs sm:text-sm shadow-xs transition-all cursor-pointer">
+                ${isSolved ? 'Re-Check Answer ✓' : 'Check Answer / Periksa Jawaban'}
+              </button>
+            </div>
+
+            <!-- Validation Feedback Box -->
+            <div id="quest-feedback-${quest.id}" class="hidden"></div>
+
+            <!-- Mr. Taqwa's Answer Key (Visible when Teacher Mode is ON) -->
+            <div class="teacher-answer-key-box ${state.teacherMode ? '' : 'hidden'} mt-4 p-4 rounded-2xl bg-skyquest-900 text-white border border-skyquest-700 animate-pop">
+              <div class="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-sky-300 mb-1.5">
+                <span>👨‍🏫</span>
+                <span>Mr. Taqwa's Answer Key — Quest ${quest.id}</span>
+              </div>
+              <div class="text-xs sm:text-sm space-y-1 text-sky-50">
+                <p><strong>Step 1 (Variable):</strong> ${quest.answerKey.step1}</p>
+                <p><strong>Step 2 (Expression):</strong> <span class="math-expr font-bold text-amber-300">${quest.answerKey.step2}</span></p>
+                <p><strong>Step 3 (Final Value):</strong> <span class="math-expr font-bold text-emerald-300">${quest.answerKey.step3}</span></p>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // ---------------------------------------------------------------------
+    // 11. DYNAMIC PROGRESS RING & GAMIFICATION UI UPDATER
+    // ---------------------------------------------------------------------
+    function updateAllProgressUI() {
+      const solvedCount = state.solvedQuests.size;
+      const totalQuests = challengesData.length;
+      const pct = Math.round((solvedCount / totalQuests) * 100);
+
+      // Update Top Gem Counter
+      const gemEl = document.getElementById('gem-counter');
+      if (gemEl) gemEl.textContent = state.gems;
+
+      // Update Sidebar & Arena Counts
+      const sidebarBadge = document.getElementById('sidebar-quest-badge');
+      if (sidebarBadge) sidebarBadge.textContent = `${solvedCount}/${totalQuests}`;
+
+      const arenaCount = document.getElementById('arena-solved-count');
+      if (arenaCount) arenaCount.textContent = solvedCount;
+
+      // Update Home Continue Learning Progress Bar (starts at 15% from lesson intro, scales to 100%)
+      const homePct = Math.min(100, Math.max(15, pct));
+      const homeBar = document.getElementById('home-continue-bar');
+      const homePctText = document.getElementById('home-continue-pct');
+      if (homeBar) homeBar.style.width = `${homePct}%`;
+      if (homePctText) homePctText.textContent = `${homePct}%`;
+
+      // Update Circular Progress Ring (circumference = 2 * PI * 40 ≈ 251.2)
+      const circumference = 251.2;
+      const offset = circumference - (solvedCount / totalQuests) * circumference;
+      const ringCircle = document.getElementById('goal-ring-circle');
+      if (ringCircle) {
+        ringCircle.style.strokeDashoffset = offset;
+        if (solvedCount === totalQuests) {
+          ringCircle.setAttribute('stroke', '#10B981');
+        }
+      }
+
+      const ringCount = document.getElementById('goal-ring-count');
+      if (ringCount) ringCount.textContent = `${solvedCount} / ${totalQuests}`;
+
+      const statusTitle = document.getElementById('goal-status-title');
+      const statusDesc = document.getElementById('goal-status-desc');
+      if (statusTitle && statusDesc) {
+        if (solvedCount === 0) {
+          statusTitle.textContent = "Keep going, 7.4!";
+          statusDesc.innerHTML = `Solve all 5 challenges to earn <strong>250 💎 Gems</strong> today.`;
+        } else if (solvedCount < totalQuests) {
+          statusTitle.textContent = `Awesome! ${totalQuests - solvedCount} left!`;
+          statusDesc.innerHTML = `You've earned <strong>${state.gems} 💎 Gems</strong>. Keep collaborating!`;
+        } else {
+          statusTitle.textContent = "MashaAllah! 100% Complete!";
+          statusDesc.innerHTML = `Grade 7.4 unlocked <strong>250 💎 Gems</strong> &amp; is ready for Tuesday's PLSV!`;
+        }
+      }
+
+      // Update 5 Quest Dots
+      for (let i = 1; i <= 5; i++) {
+        const dotWrapper = document.getElementById(`quest-dot-${i}`);
+        if (!dotWrapper) continue;
+        const circle = dotWrapper.querySelector('div');
+        if (state.solvedQuests.has(i)) {
+          circle.className = 'w-7 h-7 rounded-full bg-emerald-500 text-white font-extrabold text-xs flex items-center justify-center shadow-2xs transition-all';
+          circle.textContent = '✓';
+        }
+      }
+    }
+
+    // ---------------------------------------------------------------------
+    // 12. TUESDAY TEASER INTERACTIVITY (MYSTERY BOX PEEK & GUESS)
+    // ---------------------------------------------------------------------
+    function checkMysteryGuess() {
+      const input = document.getElementById('mystery-box-input');
+      const feedback = document.getElementById('mystery-guess-feedback');
+      if (!input || !feedback) return;
+
+      const guess = parseInt(input.value, 10);
+      feedback.classList.remove('hidden');
+
+      if (guess === 12) {
+        playChime('success');
+        feedback.className = 'mt-2.5 text-xs sm:text-sm font-extrabold text-emerald-300 animate-pop';
+        feedback.textContent = '🎉 Spot on! 3(12) + 4 = 40! You just solved a Linear Equation in One Variable (PLSV)!';
+        document.getElementById('mystery-peek-panel').classList.remove('hidden');
+      } else {
+        playChime('error');
+        feedback.className = 'mt-2.5 text-xs sm:text-sm font-bold text-amber-300 animate-pop';
+        feedback.textContent = isNaN(guess)
+          ? 'Enter a number first to test what is inside the sealed box!'
+          : `Not quite! If x = ${guess}, then 3(${guess}) + 4 = ${3 * guess + 4} (not 40). Try again or peek inside!`;
+      }
+    }
+
+    function toggleMysteryPeek() {
+      const panel = document.getElementById('mystery-peek-panel');
+      const btn = document.getElementById('peek-mystery-btn');
+      if (!panel || !btn) return;
+
+      const isHidden = panel.classList.contains('hidden');
+      if (isHidden) {
+        panel.classList.remove('hidden');
+        btn.textContent = '🙈 Hide Mystery Box';
+        playChime('success');
+      } else {
+        panel.classList.add('hidden');
+        btn.textContent = '👀 Peek Inside Mystery Box';
+        playChime('click');
+      }
+    }
+
+    // ---------------------------------------------------------------------
+    // 13. 80-MINUTE (2 JP) CLASS TIMER & CHECKLIST LOGIC
+    // ---------------------------------------------------------------------
+    function formatTime(totalSeconds) {
+      const mins = Math.floor(totalSeconds / 60);
+      const secs = totalSeconds % 60;
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function updateTimerDisplay() {
+      const display = document.getElementById('class-timer-display');
+      if (display) {
+        display.textContent = formatTime(state.timerRemainingSeconds);
+      }
+    }
+
+    function toggleClassTimer() {
+      const btn = document.getElementById('timer-start-pause-btn');
+      if (state.timerRunning) {
+        clearInterval(state.timerIntervalId);
+        state.timerRunning = false;
+        if (btn) btn.textContent = '▶ Resume';
+      } else {
+        state.timerRunning = true;
+        if (btn) btn.textContent = '⏸ Pause';
+        state.timerIntervalId = setInterval(() => {
+          if (state.timerRemainingSeconds > 0) {
+            state.timerRemainingSeconds--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(state.timerIntervalId);
+            state.timerRunning = false;
+            if (btn) btn.textContent = '▶ Start';
+            playChime('success');
+            showToast('⏰ Time is up for this lesson phase!', 'warning');
+          }
+        }, 1000);
+      }
+    }
+
+    function resetClassTimer() {
+      clearInterval(state.timerIntervalId);
+      state.timerRunning = false;
+      state.timerRemainingSeconds = state.timerTotalSeconds;
+      const btn = document.getElementById('timer-start-pause-btn');
+      if (btn) btn.textContent = '▶ Start';
+      updateTimerDisplay();
+    }
+
+    function setClassTimerMinutes(minutes, label) {
+      clearInterval(state.timerIntervalId);
+      state.timerRunning = false;
+      state.timerTotalSeconds = minutes * 60;
+      state.timerRemainingSeconds = minutes * 60;
+
+      const subtitle = document.getElementById('class-timer-subtitle');
+      const btn = document.getElementById('timer-start-pause-btn');
+      if (subtitle) subtitle.textContent = label;
+      if (btn) btn.textContent = '▶ Start';
+      updateTimerDisplay();
+      playChime('click');
+    }
+
+    function updateChecklistCount() {
+      const checkboxes = document.querySelectorAll('.lesson-flow-cb');
+      const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+      const label = document.getElementById('checklist-progress-label');
+      if (label) label.textContent = `${checked}/${checkboxes.length} Done`;
+    }
+
+    // ---------------------------------------------------------------------
+    // 14. INITIALIZE APP ON DOM LOAD
+    // ---------------------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', () => {
+      renderGuidedExample();
+      renderChallengeCards();
+      updateAllProgressUI();
+      updateTimerDisplay();
+    });
+  </script>
+</body>
+</html>
